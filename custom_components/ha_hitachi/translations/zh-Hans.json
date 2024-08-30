@@ -1,0 +1,20 @@
+{
+    "config": {
+      "step": {
+        "user": {
+          "title": "日立智家",
+          "description": "日立智家线控器远程控制",
+          "data": {
+            "username": "账号",
+            "password": "密码"
+          }
+        }
+      },
+      "error": {
+        "invalid_login": "账号密码错误"
+      },
+      "abort": {
+      },
+      "flow_title": "日立智家"
+    }
+  }
