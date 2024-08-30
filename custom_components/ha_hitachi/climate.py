@@ -28,7 +28,7 @@ from .request import refresh_auth, req_homes, req_status
 
 _LOGGER = logging.getLogger(__name__)
 
-def _get_mode(state: int, mode: int | None) -> HVACMode:
+def _get_mode(state: int, mode: int | None = None) -> HVACMode:
     if state == 0:
         return HVACMode.OFF
     if mode == ModeEnum.COLD.value:
@@ -146,17 +146,18 @@ class HitachiClimate(CoordinatorEntity[Coordinator], ClimateEntity):
     
     async def async_turn_on(self) -> None:
         """Turn the entity on."""
+        _LOGGER.debug('turn on')
         dev = self._coordinator.get_data(
             self._home_id, self._xkq_code
         )
         if dev:
             mode = _get_mode(1, dev[KEY_MODE])
             await self.async_set_hvac_mode(mode)
-            await self._coordinator.async_refresh()
 
     async def async_turn_off(self) -> None:
         """Turn the entity off."""
-        self.async_set_hvac_mode(_get_mode(0))
+        _LOGGER.debug('turn off')
+        await self.async_set_hvac_mode(_get_mode(0))
 
     @callback
     def _handle_coordinator_update(self) -> None:
