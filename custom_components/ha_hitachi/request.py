@@ -2,6 +2,7 @@ import httpx
 import time
 import logging
 import asyncio
+from functools import partial
 from .const import CodeEnum, KEY_CODE, KEY_DEVICE_TYPE, KEY_XKQ_TYPE, KEY_HOME_ID
 from homeassistant.helpers.httpx_client import get_async_client
 
@@ -44,7 +45,12 @@ def _gen_headers():
 _domain = 'https://1app.hicloud.hisensehitachi.com/'
 
 async def _post(url, payload):
-    async with get_async_client(_hass) as client:
+    get_client = None
+    if _hass:
+        get_client = partial(get_async_client, _hass)
+    else:
+        get_client = httpx.AsyncClient
+    async with get_client() as client:
         response = await client.post(f'{_domain}{url}', json=payload, headers=_gen_headers())
         return response.json()
 

@@ -20,7 +20,7 @@ from .const import (
     KEY_INLET_TEMP, KEY_CUR_TEMP, KEY_TS, KEY_XKQ_TYPE, KEY_DEVICE_TYPE, KEY_KEY_TONE,
     KEY_LED_BRIGHT, KEY_SCREEN_BRIGHT
 )
-from .request import refresh_auth, req_homes, req_status, req_cmd
+from .request import refresh_auth, req_homes, req_status, req_cmd, set_hass
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,6 +52,7 @@ class Coordinator(DataUpdateCoordinator[dict]):
         self._refresh_token = refresh_token
         self._devices = {}
         self._ts = datetime.now()
+        set_hass(hass)
 
     async def _async_setup(self):
         """Set up the coordinator
