@@ -15,7 +15,7 @@ def _log(s: str) -> object:
         _LOGGER.debug(i)
 
 
-_jgRegId = '1507bfd3f6ce767df06'
+_jgRegId = '18171adc0237683269f'
 _token = ''
 _hass = None
 
@@ -34,11 +34,11 @@ def _gen_headers():
         'x-his-apikey': '1QiLCJhbGciOiJIUzI1NiJ9',
         'x-his-timestamp': f'{int(time.time()*1000)}',
         'x-his-appid': 'com.hisensehitachi.iez2',
-        'x-his-os': 'Android',
-        'x-his-version': '7.2.0.240618_release',
+        'x-his-os': 'IOS',
+        'x-his-version': '7.3.2.250521_release',
         'content-type': 'application/json',
         'x-his-apptag': 'V3',
-        'user-agent': 'Dalvik/2.1.0 (Linux; U; Android 12; V2304A Build/W528JS)',
+        'user-agent': 'Dart/3.3 (dart:io)',
         'accept-encoding': 'gzip',
     }
 
@@ -76,10 +76,10 @@ async def rt_login(username, refresh_token):
     _LOGGER.debug('rt_login')
     return await _post('rtLogin', {
         'jgRegId': _jgRegId,
-        'loginType': '0',
+        'loginType': '4',
         'phoneNo': username,
         'refreshToken': refresh_token,
-        'version': 2
+        'version': 9
     })
 
 def parse_auth_res(res):
@@ -98,11 +98,11 @@ async def refresh_auth(username, password, token=None, refresh_token=None):
     if token:
         set_token(token)
     # refresh_token doesn't work
-    # if refresh_token:
-    #     _LOGGER.debug('refresh_auth call rt login')
-    #     par = parse_auth_res(await rt_login(username, refresh_token))
-    #     if par is not None:
-    #         return par
+    if refresh_token:
+        _LOGGER.debug('refresh_auth call rt login')
+        par = parse_auth_res(await rt_login(username, refresh_token))
+        if par is not None:
+            return par
     par = parse_auth_res(await login(username, password))
     if par is not None:
         return par
